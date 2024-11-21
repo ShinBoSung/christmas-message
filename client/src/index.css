@@ -1,0 +1,82 @@
+:root {
+  --christmas-red: #E63946;
+  --christmas-burgundy: #9D2933;
+  --christmas-gold: #FFD700;
+  --snow-white: #F8F9FA;
+  --dark-navy: #2C3E50;
+  --deep-burgundy: #6D1B20;
+  --bg-gradient-start: #34495E;
+  --bg-gradient-end: #7C2A31;
+  
+  /* 폰트 크기 변수 추가 */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-gradient-start);
+  background-image: linear-gradient(
+    to bottom,
+    var(--bg-gradient-start),
+    var(--bg-gradient-end)
+  );
+  background-attachment: fixed;
+  font-size: var(--font-size-base);
+}
+
+h1 {
+  font-family: 'Mountains of Christmas', cursive;
+  color: var(--christmas-gold);
+  font-size: var(--font-size-4xl);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-family: 'Mountains of Christmas', cursive;
+  color: var(--christmas-gold);
+  font-size: var(--font-size-3xl);
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-family: 'Mountains of Christmas', cursive;
+  color: var(--christmas-gold);
+  font-size: var(--font-size-2xl);
+  margin-bottom: 1rem;
+}
+
+/* react-toastify 커스텀 스타일 */
+.Toastify__toast {
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--dark-navy) !important;
+  border: 2px solid var(--christmas-gold);
+}
+
+.Toastify__toast--success {
+  border-color: var(--christmas-burgundy);
+}
+
+.Toastify__toast--error {
+  border-color: var(--christmas-red);
+}
+
+.Toastify__toast-body {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: var(--font-size-base);
+  color: var(--snow-white);
+}
+
+.Toastify__progress-bar {
+  background: var(--christmas-gold);
+} 

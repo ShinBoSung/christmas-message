@@ -1,0 +1,89 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--dark-pine);
+  color: var(--snow-white);
+  padding: 20px;
+}
+
+.login-form {
+  background: rgba(27, 40, 56, 0.9);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 2px solid var(--christmas-gold);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--christmas-green);
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  background: var(--snow-white);
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--christmas-gold);
+  outline: none;
+  box-shadow: 0 0 8px var(--christmas-gold);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--christmas-red);
+  color: var(--snow-white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #b91e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: var(--font-size-base);
+}
+
+.links a {
+  color: var(--christmas-gold);
+  text-decoration: none;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.links a:hover {
+  color: var(--snow-white);
+  text-decoration: underline;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 1.5rem;
+  }
+
+  button {
+    font-size: var(--font-size-base);
+  }
+
+  .links {
+    font-size: var(--font-size-sm);
+  }
+} 

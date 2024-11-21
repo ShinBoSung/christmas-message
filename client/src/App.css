@@ -1,0 +1,165 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background: linear-gradient(
+    135deg,
+    var(--dark-navy) 0%,
+    var(--deep-burgundy) 100%
+  );
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  color: var(--snow-white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 눈송이 애니메이션 */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0.3;
+  }
+}
+
+/* 20개의 개별 눈송이 생성 */
+.App-header::before {
+  content: '❄';
+  position: absolute;
+  top: -20px;
+  left: 10%;
+  font-size: 20px;
+  color: var(--snow-white);
+  opacity: 0.7;
+  animation: snowfall 8s linear infinite;
+  animation-delay: 0s;
+}
+
+.App-header::after {
+  content: '❄';
+  position: absolute;
+  top: -20px;
+  left: 20%;
+  font-size: 16px;
+  color: var(--snow-white);
+  opacity: 0.5;
+  animation: snowfall 6s linear infinite;
+  animation-delay: 1s;
+}
+
+/* 추가 눈송이들 */
+.App-header {
+  counter-reset: snowflake 18;  /* 나머지 18개의 눈송이 */
+}
+
+.App-header > * {
+  position: relative;
+}
+
+.App-header > *::before,
+.App-header > *::after {
+  counter-increment: snowflake;
+  content: '❄';
+  position: absolute;
+  top: -100vh;
+  color: var(--snow-white);
+  opacity: 0.6;
+  animation: snowfall 10s linear infinite;
+}
+
+/* 랜덤한 위치와 크기의 눈송이들 */
+.App-header > *:nth-child(3n)::before {
+  left: 30%;
+  font-size: 18px;
+  animation-duration: 7s;
+  animation-delay: 0.5s;
+}
+
+.App-header > *:nth-child(3n+1)::before {
+  left: 50%;
+  font-size: 14px;
+  animation-duration: 9s;
+  animation-delay: 1.5s;
+}
+
+.App-header > *:nth-child(3n+2)::before {
+  left: 70%;
+  font-size: 22px;
+  animation-duration: 8s;
+  animation-delay: 2s;
+}
+
+.App-header > *:nth-child(2n)::after {
+  left: 40%;
+  font-size: 16px;
+  animation-duration: 11s;
+  animation-delay: 0.7s;
+}
+
+.App-header > *:nth-child(2n+1)::after {
+  left: 60%;
+  font-size: 20px;
+  animation-duration: 6s;
+  animation-delay: 1.2s;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-link {
+  color: var(--christmas-gold);
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 2px solid var(--christmas-gold);
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-size: var(--font-size-lg);
+  background-color: rgba(128, 0, 32, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.nav-link:hover {
+  background-color: var(--christmas-gold);
+  color: var(--dark-pine);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.App-header h1 {
+  position: relative;
+  padding: 0 40px;
+}
+
+.App-header h1::before,
+.App-header h1::after {
+  content: '🎄';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-2xl);
+}
+
+.App-header h1::before {
+  left: 0;
+}
+
+.App-header h1::after {
+  right: 0;
+}
