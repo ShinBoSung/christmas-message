@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import './UserPage.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ function UserPage() {
   const [messageCount, setMessageCount] = useState(0);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
-  const isOwner = user?.username === username;
+  const isOwner = user && user.username === username;
   const [ownerDisplayName, setOwnerDisplayName] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editDisplayName, setEditDisplayName] = useState('');
@@ -229,180 +229,151 @@ function UserPage() {
     );
   };
 
+  const generatePageId = () => {
+    return 'page_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  // 회원가입 시 페이지 ID 생성
+  const createUser = async (userData) => {
+    const pageId = generatePageId();
+    const user = {
+      ...userData,
+      pageId: pageId  // 랜덤 생성된 페이지 ID 저장
+    };
+    // DB에 저장
+  }
+
   return (
     <div className="user-page">
-      <header className="user-header">
-        <h2>{ownerDisplayName || '사용자'}님의 크리스마스 메시지함</h2>
-        {isOwner ? (
-          <div className="owner-actions">
-            <button onClick={openEditModal} className="edit-btn">프로필 수정</button>
-            <button onClick={copyPageUrl} className="share-btn">페이지 공유하기</button>
-            <button onClick={handleLogout} className="logout-btn">로그아웃</button>
-            <button 
-              onClick={() => setIsDeleteModalOpen(true)} 
-              className="delete-btn"
-            >
-              회원탈퇴
-            </button>
+      {isOwner ? (
+        // 소유자인 경우 메시지함 보기 화면
+        <>
+          <div className="top-bar">
+            <a href="/" className="site-logo">SecretSanta</a>
+            <nav className="nav-menu">
+              <a href="#" onClick={openEditModal}>프로필 수정</a>
+              <a href="#" onClick={copyPageUrl}>페이지 공유하기</a>
+              <a href="#" onClick={handleLogout}>로그아웃</a>
+              <a href="#" onClick={() => setIsDeleteModalOpen(true)}>회원탈퇴</a>
+            </nav>
           </div>
-        ) : (
-          <div className="message-count">
-            현재까지 {messageCount}개의 메시지가 도착했습니다
-          </div>
-        )}
-      </header>
-      
-      {/* 프로필 수정 모달 */}
-      {isEditModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>프로필 수정</h3>
-            <form onSubmit={handleEditProfile} className="edit-form">
-              <div className="form-group">
-                <label>표시 이름</label>
-                <input
-                  type="text"
-                  value={editDisplayName}
-                  onChange={(e) => setEditDisplayName(e.target.value)}
-                  placeholder="표시될 이름을 입력하세요"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>현재 비밀번호</label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="현재 비밀번호를 입력하세요"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>새 비밀번호</label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label>새 비밀번호 확인</label>
-                <input
-                  type="password"
-                  value={confirmNewPassword}
-                  onChange={(e) => setConfirmNewPassword(e.target.value)}
-                />
-              </div>
-              <div className="modal-buttons">
-                <button type="submit">저장</button>
-                <button type="button" onClick={() => setIsEditModalOpen(false)}>취소</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
-      {/* 회원탈퇴 모달 */}
-      {isDeleteModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>회원탈퇴</h3>
-            <form onSubmit={handleDeleteAccount} className="delete-form">
-              <div className="form-group">
-                <label>비밀번호 확인</label>
-                <input
-                  type="password"
-                  value={deletePassword}
-                  onChange={(e) => setDeletePassword(e.target.value)}
-                  placeholder="비밀번호를 입력하세요"
-                  required
-                />
-              </div>
-              <div className="modal-buttons">
-                <button type="submit" className="delete-confirm-btn">탈퇴하기</button>
-                <button 
-                  type="button" 
-                  onClick={() => setIsDeleteModalOpen(false)}
-                >
-                  취소
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+          <header className="user-header">
+            <h2>{ownerDisplayName || '사용자'}님의 크리스마스 메시지함</h2>
+          </header>
 
-      <div className="message-section">
-        {!isOwner && (
-          <form onSubmit={handleSubmit} className="message-form">
-            <div className="sender-section">
-              <div className="sender-type">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={isAnonymous}
-                    onChange={(e) => setIsAnonymous(e.target.checked)}
-                  />
-                  익명으로 보내기
-                </label>
-              </div>
-              {!isAnonymous && (
-                <input
-                  type="text"
-                  value={senderName}
-                  onChange={(e) => setSenderName(e.target.value)}
-                  placeholder="보내는 사람 이름"
-                  required={!isAnonymous}
-                  className="sender-input"
-                />
-              )}
+          <div className="message-section">
+            <div className="message-count-info">
+              <p>🎄 메시지는 크리스마스 당일에 확인할 수 있습니다 🎄</p>
+              <p>현재 {messageCount}개의 메시지가 도착했습니다!</p>
             </div>
-            <div className="message-input-container">
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="따뜻한 크리스마스 메시지를 작성해보세요..."
-                required
-              />
-              <div className="message-guidelines">
-                <p className="warning">⚠️ 비속어가 포함된 메시지는 전송되지 않습니다.</p>
-                <div className="message-examples">
-                  <p>💌 메시지 작성 예시:</p>
-                  <ul>
-                    <li>"메리 크리스마스! 올해도 행복한 하루 보내세요."</li>
-                    <li>"따뜻한 연말 보내시고 새해 복 많이 받으세요!"</li>
-                    <li>"항상 건강하고 행복하시길 바랍니다."</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <button type="submit">메시지 보내기</button>
-          </form>
-        )}
+          </div>
 
-        {isOwner && (
-          <div className="messages-list">
-            <h3>받은 메시지 목록</h3>
-            {messages.length > 0 ? (
-              messages.map((msg, index) => (
-                <div key={index} className="message-item">
-                  <p>{msg.text}</p>
-                  <div className="message-meta">
-                    <small>From: {msg.sender}</small>
-                    <small>{new Date(msg.createdAt).toLocaleDateString()}</small>
+          {/* 회원탈퇴 모달 */}
+          {isDeleteModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h3>회원탈퇴</h3>
+                <p className="delete-warning">
+                  정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+                  모든 메시지와 계정 정보가 영구적으로 삭제됩니다.
+                </p>
+                <form onSubmit={handleDeleteAccount} className="delete-form">
+                  <div className="form-group">
+                    <label>비밀번호 확인</label>
+                    <input
+                      type="password"
+                      value={deletePassword}
+                      onChange={(e) => setDeletePassword(e.target.value)}
+                      placeholder="비밀번호를 입력하세요"
+                      required
+                    />
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="message-count-info">
-                <p>🎄 메시지는 크리스마스 당일에 확인할 수 있습니다 🎄</p>
-                <p>현재 {messageCount}개의 메시지가 도착했습니다!</p>
+                  <div className="modal-buttons">
+                    <button type="submit" className="delete-confirm-btn">탈퇴하기</button>
+                    <button 
+                      type="button" 
+                      onClick={() => setIsDeleteModalOpen(false)}
+                      className="cancel-btn"
+                    >
+                      취소
+                    </button>
+                  </div>
+                </form>
               </div>
+            </div>
+          )}
+        </>
+      ) : (
+        // 방문자인 경우 메시지 작성 화면
+        <>
+          <div className="top-bar">
+            <Link to="/" className="site-logo">SecretSanta</Link>
+            {user ? (
+              <nav className="nav-menu">
+                <Link to={`/users/${user.username}`}>내 메시지함</Link>
+                <a href="#" onClick={handleLogout}>로그아웃</a>
+              </nav>
+            ) : (
+              <nav className="nav-menu">
+                <Link to="/login">로그인</Link>
+                <Link to="/register">회원가입</Link>
+              </nav>
             )}
           </div>
-        )}
-      </div>
+
+          <header className="user-header">
+            <h2>{ownerDisplayName || '사용자'}님에게 메시지 보내기</h2>
+          </header>
+
+          <div className="message-section">
+            <form onSubmit={handleSubmit} className="message-form">
+              <div className="sender-section">
+                <div className="sender-type">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isAnonymous}
+                      onChange={(e) => setIsAnonymous(e.target.checked)}
+                    />
+                    익명으로 보내기
+                  </label>
+                </div>
+                {!isAnonymous && (
+                  <input
+                    type="text"
+                    value={senderName}
+                    onChange={(e) => setSenderName(e.target.value)}
+                    placeholder="보내는 사람 이름"
+                    required={!isAnonymous}
+                    className="sender-input"
+                  />
+                )}
+              </div>
+              <div className="message-input-container">
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="따뜻한 크리스마스 메시지를 작성해보세요..."
+                  required
+                />
+                <div className="message-guidelines">
+                  <p className="warning">⚠️ 비속어가 포함된 메시지는 전송되지 않습니다.</p>
+                  <div className="message-examples">
+                    <p>💌 메시지 작성 예시:</p>
+                    <ul>
+                      <li>"메리 크리스마스! 올해도 행복한 하루 보내세요."</li>
+                      <li>"따뜻한 연말 보내시고 새해 복 많이 받으세요!"</li>
+                      <li>"항상 건강하고 행복하시길 바랍니다."</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <button type="submit">메시지 보내기</button>
+            </form>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,75 +1,118 @@
 .login-container {
+  min-height: 100vh;
+  height: 100vh;
+  background: #E74C3C;
+  color: var(--snow-white);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: var(--dark-pine);
-  color: var(--snow-white);
-  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  padding-top: 60px;
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 500px;
+  background-image: url('../../public/images/pine-trees.png');
+  background-repeat: repeat-x;
+  background-position: bottom;
+  background-size: contain;
+  z-index: 0;
+  opacity: 0.95;
+  background-color: #E74C3C;
+  filter: invert(100%);
+  mix-blend-mode: screen;
 }
 
 .login-form {
-  background: rgba(27, 40, 56, 0.9);
-  padding: 2rem;
-  border-radius: 15px;
-  border: 2px solid var(--christmas-gold);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+}
+
+.login-form h2 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
 .form-group input {
   width: 100%;
   padding: 12px;
-  border: 2px solid var(--christmas-green);
-  border-radius: 8px;
-  font-size: var(--font-size-base);
-  background: var(--snow-white);
+  border: 2px solid #E74C3C;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #FFF;
   transition: all 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: var(--christmas-gold);
+  border-color: #d44235;
   outline: none;
-  box-shadow: 0 0 8px var(--christmas-gold);
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
+}
+
+.form-group input::placeholder {
+  color: #999;
+  font-size: 0.9rem;
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  background-color: var(--christmas-red);
-  color: var(--snow-white);
+  padding: 12px 24px;
+  background-color: #E74C3C;
+  color: #FFF;
   border: none;
-  border-radius: 8px;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: var(--font-size-lg);
-  font-weight: bold;
+  font-size: 1rem;
+  font-weight: 600;
   transition: all 0.3s ease;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-  background-color: #b91e20;
+  background-color: #d44235;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .links {
   margin-top: 1.5rem;
   text-align: center;
-  font-size: var(--font-size-base);
+  font-size: 0.9rem;
+  color: #333;
 }
 
 .links a {
-  color: var(--christmas-gold);
+  color: #E74C3C;
   text-decoration: none;
-  margin: 0 10px;
+  margin: 0 8px;
   transition: all 0.3s ease;
+  font-weight: 600;
 }
 
 .links a:hover {
-  color: var(--snow-white);
+  color: #d44235;
   text-decoration: underline;
 }
 
@@ -79,11 +122,66 @@ button:hover {
     padding: 1.5rem;
   }
 
+  .login-form h2 {
+    font-size: 1.75rem;
+  }
+
   button {
-    font-size: var(--font-size-base);
+    font-size: 0.9rem;
   }
 
   .links {
-    font-size: var(--font-size-sm);
+    font-size: 0.85rem;
+  }
+}
+
+/* 상단바 추가 */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #2B5329;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.site-logo {
+  color: white;
+  font-size: 1.5rem;
+  font-family: 'Mountains of Christmas', cursive;
+  text-decoration: none;
+}
+
+/* 기존 스타일 유지하고 마지막에 추가 */
+@media screen and (max-width: 768px) {
+  .login-container {
+    padding: 1rem;
+  }
+
+  .login-form {
+    width: 90%;
+    max-width: none;
+    padding: 1.5rem;
+    margin: 0 auto;
+  }
+
+  .form-group input {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
   }
 } 

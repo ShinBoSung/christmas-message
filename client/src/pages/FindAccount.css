@@ -1,79 +1,136 @@
 .find-account-container {
+  min-height: 100vh;
+  height: 100vh;
+  background: #E74C3C;
+  color: var(--snow-white);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #282c34;
-  color: white;
-  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  padding-top: 60px;
+}
+
+.find-account-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 500px;
+  background-image: url('../../public/images/pine-trees.png');
+  background-repeat: repeat-x;
+  background-position: bottom;
+  background-size: contain;
+  z-index: 0;
+  opacity: 0.95;
+  background-color: #E74C3C;
+  filter: invert(100%);
+  mix-blend-mode: screen;
+}
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #2B5329;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.find-account-container form {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
 .mode-selector {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(231, 76, 60, 0.2);
 }
 
-.mode-selector button {
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  color: #61dafb;
-  border: 2px solid #61dafb;
-  border-radius: 4px;
-  cursor: pointer;
+.mode-selector a {
+  color: #666;
+  text-decoration: none;
   font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.mode-selector button.active {
-  background-color: #61dafb;
-  color: #282c34;
+.mode-selector a.active {
+  color: #E74C3C;
+  font-weight: 600;
 }
 
-.mode-selector button:hover {
-  background-color: #4fa8d5;
-  color: white;
-}
-
-form {
-  width: 100%;
-  max-width: 300px;
+.mode-selector a:hover {
+  color: #E74C3C;
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 4px;
+  padding: 12px;
+  border: 2px solid #E74C3C;
+  border-radius: 12px;
   font-size: 1rem;
+  background: #FFF;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #d44235;
+  outline: none;
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
 }
 
 button[type="submit"] {
   width: 100%;
-  padding: 0.5rem;
-  background-color: #61dafb;
-  color: black;
+  padding: 12px 24px;
+  background-color: #E74C3C;
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;
   cursor: pointer;
   font-size: 1rem;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button[type="submit"]:hover {
-  background-color: #4fa8d5;
+  background-color: #d44235;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .result-message {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #363b44;
-  border-radius: 4px;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 12px;
   text-align: center;
+  color: #333;
 }
 
 .links {
@@ -82,10 +139,85 @@ button[type="submit"]:hover {
 }
 
 .links a {
-  color: #61dafb;
+  color: #E74C3C;
   text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .links a:hover {
+  color: #d44235;
   text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .find-account-container form {
+    padding: 1.5rem;
+  }
+
+  .mode-selector {
+    gap: 1rem;
+  }
+
+  .mode-selector a {
+    font-size: 1rem;
+  }
+
+  button[type="submit"] {
+    font-size: 0.9rem;
+  }
+}
+
+.find-account-container > h2 {
+  color: #FFF;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Mountains of Christmas', cursive;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.find-account-container form h2 {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .find-account-container > h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .find-account-container {
+    padding: 1rem;
+  }
+
+  .find-account-container form {
+    width: 90%;
+    max-width: none;
+    padding: 1.5rem;
+    margin: 0 auto;
+  }
+
+  .form-group input {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .mode-selector {
+    gap: 1rem;
+  }
+
+  .mode-selector a {
+    font-size: 0.9rem;
+  }
 } 

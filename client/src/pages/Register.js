@@ -20,15 +20,15 @@ function Register() {
     }
 
     try {
-      const response = await axios.post('/api/register', {
+      const response = await axios.post('/api/auth/register', {
         username,
         displayName,
         email,
         password
       });
       
-      toast.success('회원가입이 완료되었습니다. 로그인해주세요.');
-      navigate('/login');
+      toast.success('회원가입이 완료되었습니다. 이메일을 확인해주세요.');
+      navigate('/verify-email-notice');
     } catch (error) {
       console.error('회원가입 실패:', error);
       
@@ -44,6 +44,9 @@ function Register() {
 
   return (
     <div className="register-container">
+      <div className="top-bar">
+        <Link to="/" className="site-logo">SecretSanta</Link>
+      </div>
       <h2>회원가입</h2>
       <form onSubmit={handleSubmit} className="register-form">
         <div className="form-group">

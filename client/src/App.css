@@ -3,11 +3,7 @@
 }
 
 .App-header {
-  background: linear-gradient(
-    135deg,
-    var(--dark-navy) 0%,
-    var(--deep-burgundy) 100%
-  );
+  background: #E74C3C;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,15 +22,15 @@
     opacity: 0;
   }
   20% {
-    opacity: 1;
+    opacity: 0.8;
   }
   100% {
     transform: translateY(100vh);
-    opacity: 0.3;
+    opacity: 0.6;
   }
 }
 
-/* 20개의 개별 눈송이 생성 */
+/* 40개의 개별 눈송이 생성 */
 .App-header::before {
   content: '❄';
   position: absolute;
@@ -42,7 +38,7 @@
   left: 10%;
   font-size: 20px;
   color: var(--snow-white);
-  opacity: 0.7;
+  opacity: 0.9;
   animation: snowfall 8s linear infinite;
   animation-delay: 0s;
 }
@@ -54,14 +50,14 @@
   left: 20%;
   font-size: 16px;
   color: var(--snow-white);
-  opacity: 0.5;
+  opacity: 0.8;
   animation: snowfall 6s linear infinite;
   animation-delay: 1s;
 }
 
 /* 추가 눈송이들 */
 .App-header {
-  counter-reset: snowflake 18;  /* 나머지 18개의 눈송이 */
+  counter-reset: snowflake 38;  /* 38개로 증가 (기존 2개 + 38개 = 40개) */
 }
 
 .App-header > * {
@@ -75,44 +71,58 @@
   position: absolute;
   top: -100vh;
   color: var(--snow-white);
-  opacity: 0.6;
+  opacity: 0.8;
   animation: snowfall 10s linear infinite;
 }
 
-/* 랜덤한 위치와 크기의 눈송이들 */
-.App-header > *:nth-child(3n)::before {
-  left: 30%;
-  font-size: 18px;
-  animation-duration: 7s;
-  animation-delay: 0.5s;
+/* 랜덤한 위치와 크기의 눈송이들 추가 */
+.App-header > *:nth-child(4n)::before {
+  left: 25%;
+  font-size: 16px;
+  animation-duration: 8.5s;
+  animation-delay: 0.3s;
 }
 
-.App-header > *:nth-child(3n+1)::before {
-  left: 50%;
+.App-header > *:nth-child(4n+1)::before {
+  left: 45%;
+  font-size: 20px;
+  animation-duration: 10s;
+  animation-delay: 1.8s;
+}
+
+.App-header > *:nth-child(4n+2)::before {
+  left: 65%;
   font-size: 14px;
-  animation-duration: 9s;
+  animation-duration: 7.5s;
+  animation-delay: 2.2s;
+}
+
+.App-header > *:nth-child(4n+3)::before {
+  left: 85%;
+  font-size: 18px;
+  animation-duration: 9.5s;
   animation-delay: 1.5s;
 }
 
-.App-header > *:nth-child(3n+2)::before {
-  left: 70%;
-  font-size: 22px;
+.App-header > *:nth-child(3n)::after {
+  left: 35%;
+  font-size: 15px;
+  animation-duration: 7s;
+  animation-delay: 0.4s;
+}
+
+.App-header > *:nth-child(3n+1)::after {
+  left: 55%;
+  font-size: 19px;
+  animation-duration: 9s;
+  animation-delay: 1.6s;
+}
+
+.App-header > *:nth-child(3n+2)::after {
+  left: 75%;
+  font-size: 17px;
   animation-duration: 8s;
-  animation-delay: 2s;
-}
-
-.App-header > *:nth-child(2n)::after {
-  left: 40%;
-  font-size: 16px;
-  animation-duration: 11s;
-  animation-delay: 0.7s;
-}
-
-.App-header > *:nth-child(2n+1)::after {
-  left: 60%;
-  font-size: 20px;
-  animation-duration: 6s;
-  animation-delay: 1.2s;
+  animation-delay: 2.5s;
 }
 
 .nav-links {
@@ -124,42 +134,64 @@
 }
 
 .nav-link {
-  color: var(--christmas-gold);
+  color: #FFF;
   text-decoration: none;
-  padding: 10px 20px;
-  border: 2px solid var(--christmas-gold);
-  border-radius: 5px;
+  padding: 8px 16px;
+  border: 2px solid #FFF;
+  border-radius: 25px;
   transition: all 0.3s ease;
-  font-size: var(--font-size-lg);
-  background-color: rgba(128, 0, 32, 0.8);
+  font-size: var(--font-size-base);
+  background-color: transparent;
   backdrop-filter: blur(4px);
+  white-space: nowrap;
 }
 
 .nav-link:hover {
-  background-color: var(--christmas-gold);
-  color: var(--dark-pine);
+  background-color: #FFF;
+  color: #E74C3C;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .App-header h1 {
   position: relative;
-  padding: 0 40px;
+  color: var(--christmas-gold);
+  text-shadow: 
+    3px 3px 0 rgba(0, 0, 0, 0.8),        /* 더 진한 검은색 그림자 */
+    0 0 20px rgba(0, 0, 0, 0.5),         /* 블러 효과 추가 */
+    0 0 40px rgba(255, 215, 0, 0.4);     /* 골드 글로우 효과 */
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .App-header h1::before,
 .App-header h1::after {
-  content: '🎄';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: var(--font-size-2xl);
+  content: '';
 }
 
-.App-header h1::before {
-  left: 0;
+/* 모바일 반응형 추가 */
+@media (max-width: 768px) {
+  .App-header h1 {
+    font-size: 2.5rem;  /* 모바일에서 글자 크기 축소 */
+    padding: 0 1rem;
+  }
+
+  .nav-links {
+    flex-direction: column;  /* 버튼을 세로로 배치 */
+    gap: 0.8rem;
+  }
+
+  .nav-link {
+    width: 200px;  /* 버튼 너비 고정 */
+    padding: 10px 0;
+    text-align: center;
+  }
 }
 
-.App-header h1::after {
-  right: 0;
+@media (max-width: 480px) {
+  .App-header h1 {
+    font-size: 2rem;
+  }
 }

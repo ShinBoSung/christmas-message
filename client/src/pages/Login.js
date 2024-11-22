@@ -33,6 +33,9 @@ function Login() {
 
   return (
     <div className="login-container">
+      <div className="top-bar">
+        <Link to="/" className="site-logo">SecretSanta</Link>
+      </div>
       <h2>로그인</h2>
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">

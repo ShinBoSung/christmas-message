@@ -23,7 +23,18 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  pageId: {
+    type: String,
+    unique: true,
+    default: () => 'page_' + Math.random().toString(36).substr(2, 9)
+  },
+  isEmailVerified: {
+    type: Boolean,
+    default: false
+  },
+  verificationToken: String,
+  verificationTokenExpires: Date
 });
 
 const passwordValidator = (password) => {

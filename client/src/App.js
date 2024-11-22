@@ -13,7 +13,7 @@ function Home() {
     <div className="App">
       <header className="App-header">
         <h1>Christmas Message</h1>
-        <p>환영합니다!</p>
+        <p>따뜻한 마음을 전하는 크리스마스 메시지 🎄</p>
         <nav className="nav-links">
           <Link to="/login" className="nav-link">로그인</Link>
           <Link to="/register" className="nav-link">회원가입</Link>

@@ -32,24 +32,12 @@ function FindAccount() {
 
   return (
     <div className="find-account-container">
-      <h2>계정 찾기</h2>
-      <div className="mode-selector">
-        <button 
-          className={mode === 'username' ? 'active' : ''} 
-          onClick={() => setMode('username')}
-        >
-          아이디 찾기
-        </button>
-        <button 
-          className={mode === 'password' ? 'active' : ''} 
-          onClick={() => setMode('password')}
-        >
-          비밀번호 재설정
-        </button>
+      <div className="top-bar">
+        <Link to="/" className="site-logo">SecretSanta</Link>
       </div>
-
-      {mode === 'username' ? (
-        <form onSubmit={handleFindUsername}>
+      <h2>계정찾기</h2>
+      <form onSubmit={mode === 'username' ? handleFindUsername : handleResetPassword} className="find-form">
+        {mode === 'username' ? (
           <div className="form-group">
             <input
               type="email"
@@ -59,37 +47,53 @@ function FindAccount() {
               required
             />
           </div>
-          <button type="submit">아이디 찾기</button>
-        </form>
-      ) : (
-        <form onSubmit={handleResetPassword}>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="아이디"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="email"
-              placeholder="이메일"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">비밀번호 재설정</button>
-        </form>
-      )}
+        ) : (
+          <>
+            <div className="form-group">
+              <input
+                type="text"
+                placeholder="아이디"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="email"
+                placeholder="이메일"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
+        
+        <button type="submit">
+          {mode === 'username' ? '아이디 찾기' : '비밀번호 재설정'}
+        </button>
+        
+        <div className="mode-selector">
+          <a 
+            className={mode === 'username' ? 'active' : ''} 
+            onClick={() => setMode('username')}
+          >
+            아이디 찾기
+          </a>
+          <a 
+            className={mode === 'password' ? 'active' : ''} 
+            onClick={() => setMode('password')}
+          >
+            비밀번호 찾기
+          </a>
+          <Link to="/login" style={{ color: '#666' }}>
+            로그인
+          </Link>
+        </div>
+      </form>
 
       {result && <div className="result-message">{result}</div>}
-
-      <div className="links">
-        <Link to="/login">로그인으로 돌아가기</Link>
-      </div>
     </div>
   );
 }

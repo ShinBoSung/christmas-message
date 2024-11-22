@@ -8,15 +8,15 @@
   --bg-gradient-start: #34495E;
   --bg-gradient-end: #7C2A31;
   
-  /* 폰트 크기 변수 추가 */
-  --font-size-xs: 0.75rem;    /* 12px */
-  --font-size-sm: 0.875rem;   /* 14px */
-  --font-size-base: 1rem;     /* 16px */
-  --font-size-lg: 1.125rem;   /* 18px */
-  --font-size-xl: 1.25rem;    /* 20px */
-  --font-size-2xl: 1.5rem;    /* 24px */
-  --font-size-3xl: 1.875rem;  /* 30px */
-  --font-size-4xl: 2.25rem;   /* 36px */
+  /* 폰트 크기 변수 수정 */
+  --font-size-xs: 0.625rem;    /* 10px */
+  --font-size-sm: 0.75rem;     /* 12px */
+  --font-size-base: 0.875rem;  /* 14px */
+  --font-size-lg: 1rem;        /* 16px */
+  --font-size-xl: 1.125rem;    /* 18px */
+  --font-size-2xl: 1.25rem;    /* 20px */
+  --font-size-3xl: 1.5rem;     /* 24px */
+  --font-size-4xl: 1.875rem;   /* 30px */
 }
 
 body {
@@ -24,59 +24,164 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-gradient-start);
-  background-image: linear-gradient(
-    to bottom,
-    var(--bg-gradient-start),
-    var(--bg-gradient-end)
-  );
-  background-attachment: fixed;
+  background: #E74C3C;
   font-size: var(--font-size-base);
 }
 
-h1 {
+h1, h2, h3, .site-logo {
   font-family: 'Mountains of Christmas', cursive;
-  color: var(--christmas-gold);
-  font-size: var(--font-size-4xl);
+  color: #FFF;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.login-form h2,
+.register-form h2,
+.find-account-container h2,
+.write-message-container h2,
+.modal h3 {
+  font-family: 'Mountains of Christmas', cursive;
+  font-size: 2.5rem;
+  color: #333;
   margin-bottom: 1.5rem;
+  text-shadow: none;
 }
 
-h2 {
-  font-family: 'Mountains of Christmas', cursive;
-  color: var(--christmas-gold);
-  font-size: var(--font-size-3xl);
-  margin-bottom: 1.25rem;
+p, input, textarea, button, label {
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-h3 {
-  font-family: 'Mountains of Christmas', cursive;
-  color: var(--christmas-gold);
-  font-size: var(--font-size-2xl);
-  margin-bottom: 1rem;
+a {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
+}
+
+button {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 600;
+}
+
+.modal p {
+  font-family: 'Noto Sans KR', sans-serif;
+  line-height: 1.6;
 }
 
 /* react-toastify 커스텀 스타일 */
 .Toastify__toast {
   border-radius: 8px;
   padding: 16px;
-  background: var(--dark-navy) !important;
+  background: rgba(27, 40, 56, 0.9) !important;
   border: 2px solid var(--christmas-gold);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px;
 }
 
 .Toastify__toast--success {
-  border-color: var(--christmas-burgundy);
+  border: 2px solid var(--christmas-gold);
 }
 
 .Toastify__toast--error {
-  border-color: var(--christmas-red);
+  border: 2px solid var(--christmas-gold);
 }
 
 .Toastify__toast-body {
+  margin: 0;
+  padding: 0;
+  flex: 1;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: var(--font-size-base);
   color: var(--snow-white);
+  text-align: center;
 }
 
 .Toastify__progress-bar {
   background: var(--christmas-gold);
-} 
+  height: 3px;
+}
+
+/* Toast 닫기 버튼 스타일 수정 */
+.Toastify__close-button {
+  color: var(--christmas-gold);
+  opacity: 0.7;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.Toastify__close-button > svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Toast 컨테이너 스타일 조정 */
+.Toastify__toast {
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(27, 40, 56, 0.9) !important;
+  border: 2px solid var(--christmas-gold);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+}
+
+/* Toast 내용과 닫기 버튼 사이 간격 조정 */
+.Toastify__toast-body {
+  margin-right: 10px;
+}
+
+/* 공통 페이지 배경 스타일 */
+.page-container {
+  min-height: 100vh;
+  background: #E74C3C;
+  color: var(--snow-white);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
+}
+
+/* 컨텐츠를 나무 배경 위에 보이게 하기 위한 스타일 */
+.content-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* 모바일 기본 설정 추가 */
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 0.875rem;
+    --font-size-lg: 1rem;
+    --font-size-xl: 1.125rem;
+    --font-size-2xl: 1.25rem;
+  }
+
+  .Toastify__toast {
+    margin: 0.5rem;
+    width: calc(100% - 1rem) !important;
+  }
+}
+ 
