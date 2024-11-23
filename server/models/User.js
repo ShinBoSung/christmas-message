@@ -27,7 +27,10 @@ const userSchema = new mongoose.Schema({
   pageId: {
     type: String,
     unique: true,
-    default: () => 'page_' + Math.random().toString(36).substr(2, 9)
+    default: function() {
+      return 'page_' + Math.random().toString(36).substr(2, 9);
+    },
+    required: true
   },
   isEmailVerified: {
     type: Boolean,
@@ -58,6 +61,9 @@ userSchema.pre('save', async function(next) {
       throw new Error('비밀번호는 8자 이상, 대소문자, 숫자, 특수문자를 포함해야 합니다.');
     }
     this.password = await bcrypt.hash(this.password, parseInt(process.env.BCRYPT_SALT_ROUNDS));
+  }
+  if (!this.pageId) {
+    this.pageId = 'page_' + Math.random().toString(36).substr(2, 9);
   }
   next();
 });

@@ -12,19 +12,16 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', {
+      const response = await axios.post('/api/auth/login', {
         username,
         password
       });
       
-      const userData = {
-        username: response.data.user.username,
-        displayName: response.data.user.displayName,
-        email: response.data.user.email
-      };
-      localStorage.setItem('user', JSON.stringify(userData));
-      navigate(`/users/${userData.username}`);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.token);
+      
       toast.success('로그인 성공!');
+      navigate(`/pages/${response.data.user.pageId}`);
     } catch (error) {
       console.error('로그인 실패:', error);
       toast.error(error.response?.data?.error || '로그인에 실패했습니다.');

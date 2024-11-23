@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const generatePageId = () => {
   return 'page_' + Math.random().toString(36).substr(2, 9);
@@ -8,6 +9,8 @@ const generatePageId = () => {
 
 const migratePageIds = async () => {
   try {
+    console.log('MongoDB URI:', process.env.MONGODB_URI);
+    
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('데이터베이스 연결 성공');
 
@@ -29,5 +32,8 @@ const migratePageIds = async () => {
     process.exit(1);
   }
 };
+
+// strictQuery 경고 해결
+mongoose.set('strictQuery', false);
 
 migratePageIds(); 

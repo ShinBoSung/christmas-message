@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 function UserPage() {
-  const { username } = useParams();
+  const { pageId } = useParams();
   const [message, setMessage] = useState('');
   const [senderName, setSenderName] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -13,7 +13,7 @@ function UserPage() {
   const [messageCount, setMessageCount] = useState(0);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
-  const isOwner = user && user.username === username;
+  const isOwner = user && user.pageId === pageId;
   const [ownerDisplayName, setOwnerDisplayName] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editDisplayName, setEditDisplayName] = useState('');
@@ -27,7 +27,7 @@ function UserPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/users/${username}`);
+        const response = await axios.get(`/api/pages/${pageId}`);
         console.log('서버에서 받은 사용자 정보:', response.data);
         
         if (response.data.displayName) {
@@ -44,27 +44,24 @@ function UserPage() {
         }
       } catch (error) {
         console.error('사용자 정보 조회 실패:', error);
+        console.error('에러 상세:', error.response?.data);
+        navigate('/');
       }
     };
 
-    const userData = JSON.parse(localStorage.getItem('user'));
-    if (userData?.displayName) {
-      setOwnerDisplayName(userData.displayName);
-    }
-
     fetchUserData();
-  }, [username, isOwner]);
+  }, [pageId, navigate]);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`/api/messages/${username}?isOwner=${isOwner}`);
+        const response = await axios.get(`/api/messages/${pageId}?isOwner=${isOwner}`);
         if (isOwner) {
           if (response.data.isChristmas) {
             setMessages(response.data.messages);
           } else {
             const newCount = response.data.count;
-            const savedCount = parseInt(localStorage.getItem(`${username}_messageCount`) || '0');
+            const savedCount = parseInt(localStorage.getItem(`${pageId}_messageCount`) || '0');
             
             if (savedCount === 0) {
               toast.info(`현재 ${newCount}개의 메시지가 있습니다! 🎄`);
@@ -74,7 +71,7 @@ function UserPage() {
             }
             
             setMessageCount(newCount);
-            localStorage.setItem(`${username}_messageCount`, newCount.toString());
+            localStorage.setItem(`${pageId}_messageCount`, newCount.toString());
           }
         } else {
           setMessageCount(response.data.count);
@@ -89,14 +86,14 @@ function UserPage() {
     const interval = setInterval(fetchMessages, 60000);
 
     return () => clearInterval(interval);
-  }, [username, isOwner]);
+  }, [pageId, isOwner]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post('/api/messages', {
         text: message,
-        recipientUsername: username,
+        recipientPageId: pageId,
         senderName: isAnonymous ? '익명' : senderName
       });
       
@@ -106,19 +103,18 @@ function UserPage() {
       setIsAnonymous(false);
       
       // 메시지 카운트 업데이트
-      const response = await axios.get(`/api/messages/${username}?isOwner=false`);
+      const response = await axios.get(`/api/messages/${pageId}?isOwner=false`);
       setMessageCount(response.data.count);
       
       toast.success('메시지가 전송되었습니다!');
     } catch (error) {
       console.error('메시지 저장 실패:', error);
-      // 서버에서 보낸 에러 메시지 표시
       toast.error(error.response?.data?.error || '메시지 저장에 실패했습니다.');
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem(`${username}_messageCount`);
+    localStorage.removeItem(`${pageId}_messageCount`);
     localStorage.removeItem('user');
     navigate('/login');
   };
@@ -155,7 +151,7 @@ function UserPage() {
     }
 
     try {
-      const response = await axios.put(`/api/users/${username}`, {
+      const response = await axios.put(`/api/users/${pageId}`, {
         displayName: editDisplayName,
         currentPassword,
         newPassword: newPassword || undefined
@@ -207,7 +203,7 @@ function UserPage() {
             label: '예',
             onClick: async () => {
               try {
-                await axios.delete(`/api/users/${username}`, {
+                await axios.delete(`/api/users/${pageId}`, {
                   data: { password: deletePassword }
                 });
                 
@@ -245,135 +241,84 @@ function UserPage() {
 
   return (
     <div className="user-page">
-      {isOwner ? (
-        // 소유자인 경우 메시지함 보기 화면
-        <>
-          <div className="top-bar">
-            <a href="/" className="site-logo">SecretSanta</a>
-            <nav className="nav-menu">
-              <a href="#" onClick={openEditModal}>프로필 수정</a>
-              <a href="#" onClick={copyPageUrl}>페이지 공유하기</a>
-              <a href="#" onClick={handleLogout}>로그아웃</a>
-              <a href="#" onClick={() => setIsDeleteModalOpen(true)}>회원탈퇴</a>
-            </nav>
+      <div className="top-bar">
+        <Link to="/" className="site-logo">SecretSanta</Link>
+        {isOwner ? (
+          <nav className="nav-menu">
+            <a href="#" onClick={copyPageUrl}>페이지 공유하기</a>
+            <a href="#" onClick={handleLogout}>로그아웃</a>
+          </nav>
+        ) : user ? (
+          <nav className="nav-menu">
+            <Link to={`/pages/${user.pageId}`}>내 메시지함</Link>
+            <a href="#" onClick={handleLogout}>로그아웃</a>
+          </nav>
+        ) : (
+          <nav className="nav-menu">
+            <Link to="/login">로그인</Link>
+            <Link to="/register">회원가입</Link>
+          </nav>
+        )}
+      </div>
+
+      <header className="user-header">
+        <h2>{ownerDisplayName}님{isOwner ? '의 메시지함' : '에게 메시지 보내기'}</h2>
+      </header>
+
+      <div className="message-section">
+        {isOwner ? (
+          <div className="message-count-info">
+            <p>🎄 메시지는 크리스마스 당일에 확인할 수 있습니다 🎄</p>
+            <p>현재 {messageCount}개의 메시지가 도착했습니다!</p>
           </div>
-
-          <header className="user-header">
-            <h2>{ownerDisplayName || '사용자'}님의 크리스마스 메시지함</h2>
-          </header>
-
-          <div className="message-section">
-            <div className="message-count-info">
-              <p>🎄 메시지는 크리스마스 당일에 확인할 수 있습니다 🎄</p>
-              <p>현재 {messageCount}개의 메시지가 도착했습니다!</p>
-            </div>
-          </div>
-
-          {/* 회원탈퇴 모달 */}
-          {isDeleteModalOpen && (
-            <div className="modal-overlay">
-              <div className="modal">
-                <h3>회원탈퇴</h3>
-                <p className="delete-warning">
-                  정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.
-                  모든 메시지와 계정 정보가 영구적으로 삭제됩니다.
-                </p>
-                <form onSubmit={handleDeleteAccount} className="delete-form">
-                  <div className="form-group">
-                    <label>비밀번호 확인</label>
-                    <input
-                      type="password"
-                      value={deletePassword}
-                      onChange={(e) => setDeletePassword(e.target.value)}
-                      placeholder="비밀번호를 입력하세요"
-                      required
-                    />
-                  </div>
-                  <div className="modal-buttons">
-                    <button type="submit" className="delete-confirm-btn">탈퇴하기</button>
-                    <button 
-                      type="button" 
-                      onClick={() => setIsDeleteModalOpen(false)}
-                      className="cancel-btn"
-                    >
-                      취소
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-        </>
-      ) : (
-        // 방문자인 경우 메시지 작성 화면
-        <>
-          <div className="top-bar">
-            <Link to="/" className="site-logo">SecretSanta</Link>
-            {user ? (
-              <nav className="nav-menu">
-                <Link to={`/users/${user.username}`}>내 메시지함</Link>
-                <a href="#" onClick={handleLogout}>로그아웃</a>
-              </nav>
-            ) : (
-              <nav className="nav-menu">
-                <Link to="/login">로그인</Link>
-                <Link to="/register">회원가입</Link>
-              </nav>
-            )}
-          </div>
-
-          <header className="user-header">
-            <h2>{ownerDisplayName || '사용자'}님에게 메시지 보내기</h2>
-          </header>
-
-          <div className="message-section">
-            <form onSubmit={handleSubmit} className="message-form">
-              <div className="sender-section">
-                <div className="sender-type">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={isAnonymous}
-                      onChange={(e) => setIsAnonymous(e.target.checked)}
-                    />
-                    익명으로 보내기
-                  </label>
-                </div>
-                {!isAnonymous && (
+        ) : (
+          <form onSubmit={handleSubmit} className="message-form">
+            <div className="sender-section">
+              <div className="sender-type">
+                <label>
                   <input
-                    type="text"
-                    value={senderName}
-                    onChange={(e) => setSenderName(e.target.value)}
-                    placeholder="보내는 사람 이름"
-                    required={!isAnonymous}
-                    className="sender-input"
+                    type="checkbox"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
                   />
-                )}
+                  익명으로 보내기
+                </label>
               </div>
-              <div className="message-input-container">
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="따뜻한 크리스마스 메시지를 작성해보세요..."
-                  required
+              {!isAnonymous && (
+                <input
+                  type="text"
+                  value={senderName}
+                  onChange={(e) => setSenderName(e.target.value)}
+                  placeholder="보내는 사람 이름"
+                  required={!isAnonymous}
+                  className="sender-input"
                 />
-                <div className="message-guidelines">
-                  <p className="warning">⚠️ 비속어가 포함된 메시지는 전송되지 않습니다.</p>
-                  <div className="message-examples">
-                    <p>💌 메시지 작성 예시:</p>
-                    <ul>
-                      <li>"메리 크리스마스! 올해도 행복한 하루 보내세요."</li>
-                      <li>"따뜻한 연말 보내시고 새해 복 많이 받으세요!"</li>
-                      <li>"항상 건강하고 행복하시길 바랍니다."</li>
-                    </ul>
-                  </div>
+              )}
+            </div>
+            <div className="message-input-container">
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="따뜻한 크리스마스 메시지를 작성해보세요..."
+                required
+                className="message-input"
+              />
+              <div className="message-guidelines">
+                <p className="warning-text">⚠️ 비속어가 포함된 메시지는 전송되지 않습니다.</p>
+                <div className="example-text">
+                  <p>💌 메시지 작성 예시:</p>
+                  <ul>
+                    <li>"메리 크리스마스! 올해도 행복한 하루 보내세요."</li>
+                    <li>"따뜻한 연말 보내시고 새해 복 많이 받으세요!"</li>
+                    <li>"항상 건강하고 행복하시길 바랍니다."</li>
+                  </ul>
                 </div>
               </div>
-              <button type="submit">메시지 보내기</button>
-            </form>
-          </div>
-        </>
-      )}
+            </div>
+            <button type="submit" className="submit-button">메시지 보내기</button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }
